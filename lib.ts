@@ -26,6 +26,10 @@ export async function decrypt(input: string): Promise<any> {
   return payload;
 }
 
+export function clearSessionCookie() {
+  cookies().set("session", "", { maxAge: 0, path: "/" });
+}
+
 export async function login(formData: FormData) {
   // Verify credentials && get the user
 

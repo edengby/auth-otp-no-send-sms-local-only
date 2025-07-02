@@ -3,6 +3,8 @@
 
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
+import {redirect} from "next/navigation";
+import {clearSessionCookie} from "@/lib";
 
 export async function getSession() {
     const token = cookies().get('session')?.value;
@@ -35,4 +37,10 @@ export async function selectPhone(formData: FormData) {
         .setExpirationTime('1h')
         .sign(new TextEncoder().encode('secret'));
     cookies().set('session', jwt, { httpOnly: true, maxAge: 3600 });
+}
+
+export async function logout() {
+    clearSessionCookie();                      // delete the session cookie
+    cookies().set('otp', '', { maxAge: 0, path: '/' }); // (optional) clear OTP cookie
+    redirect('/');                             // send user back to login
 }
